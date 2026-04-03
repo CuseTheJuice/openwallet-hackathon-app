@@ -6,6 +6,18 @@ Public submission for the [OpenWallet OWS hackathon](https://hackathon.openwalle
 
 **Repository:** [github.com/CuseTheJuice/openwallet-hackathon-app](https://github.com/CuseTheJuice/openwallet-hackathon-app)
 
+## How this fits the [OWS Hackathon](https://hackathon.openwallet.sh/) tracks
+
+We focused on **Agentic Storefronts & Real-World Commerce**, **Pay-Per-Call Services & API Monetization**, and **Multi-Agent Systems & Autonomous Economies**. Here is how this repo maps to each.
+
+| Track | How this submission fits |
+| ----- | ------------------------ |
+| **Agentic Storefronts & Real-World Commerce** | A storefront or agent-run business still needs **email**: onboarding users, receipts, newsletters, and support inboxes. This skill lets an **OpenClaw** operator treat **production mail** as a metered utility: create mailboxes, send and read mail, and scale storage by paying **CuseTheJuice** over **x402** from an **OWS** wallet—so the agent can run real outbound/commerce workflows without a separate billing integration for every mail action. |
+| **Pay-Per-Call Services & API Monetization** | The **admin API** at **`https://mail.cusethejuice.com/admin-api`** is monetized **per HTTP call** (list, read, send, quota, attachments, tiers, and related routes). **`ows pay request`** satisfies **402** challenges in **USDC on Base**; there is no subscription abstraction in the skill—each capability is a **pay-per-call** API in the hackathon sense. |
+| **Multi-Agent Systems & Autonomous Economies** | **OWS** is built for **delegated, policy-scoped** wallet use: different agents or tools can share a vault with **API keys and spend policies** instead of one opaque hot key. A **mail** agent can pay for x402 mail calls while other agents pay other x402 vendors, with **separate budgets and audit trails**—composable rails for swarms or pipelines that all settle in **USDC** over **x402**. |
+
+For setup, routes, and agent behavior, see [INSTALL-OPENCLAW.md](INSTALL-OPENCLAW.md) and [skills/x402_mailbox_ows/SKILL.md](skills/x402_mailbox_ows/SKILL.md).
+
 ## Contents
 
 | Path | Description |
