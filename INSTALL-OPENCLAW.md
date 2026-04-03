@@ -1,6 +1,8 @@
 # Install OpenClaw skill (x402 mailbox + MoonPay OWS)
 
-This repository ships an [OpenClaw](https://docs.openclaw.ai/) skill **`x402_mailbox_ows`** that teaches an agent to call this mail server’s **x402**-protected **`/admin-api`** endpoints using the **MoonPay OWS CLI** (`ows pay request`).
+This **public** hackathon repository ([openwallet-hackathon-app](https://github.com/CuseTheJuice/openwallet-hackathon-app)) documents an [OpenClaw](https://docs.openclaw.ai/) skill that calls the **CuseTheJuice production** x402 admin API at **`https://mail.cusethejuice.com/admin-api`** using the **MoonPay OWS CLI** (`ows pay request`). The skill lists **every** priced route (create mailbox, list/read mail, attachments, send, quota, storage tiers, human HTML flows). **Agents must not substitute another host** for this integration—the hackathon demo targets **mail.cusethejuice.com**, not “whatever server you run locally.”
+
+The live mail stack is built from the upstream **[x402-bot-mailbox](https://github.com/CuseTheJuice/x402-bot-mailbox)** repo. The sections below about **`install_postfix_x402.sh`** apply when deploying from that project (optional for reviewers who only install the skill from this repo).
 
 ## Fixed payment address (skill)
 
@@ -34,9 +36,9 @@ Then reload OpenClaw (e.g. `openclaw gateway restart` or `/new` in chat) and ver
 openclaw skills list
 ```
 
-## Install alongside the mail server installer
+## Install alongside the mail server installer (upstream)
 
-When running **`install_postfix_x402.sh`**, pass:
+When running **`install_postfix_x402.sh`** from **x402-bot-mailbox**, pass:
 
 ```bash
 sudo bash ./install_postfix_x402.sh --install-openclaw-skill
@@ -61,31 +63,25 @@ sudo -E bash ./install_postfix_x402.sh
 |------|---------|
 | `skills/x402_mailbox_ows/SKILL.md` | Skill source (YAML frontmatter + agent instructions) |
 | `workspace/x402-config-template.ini` | Example INI; `wallet_address` must stay the fixed address when using this skill |
-| `scripts/test-ows-x402.sh` | Example `ows pay request` calls (update host, wallet UUID, credentials) |
+| `scripts/test-ows-x402.sh` | Example `ows pay request` (defaults to `https://mail.cusethejuice.com/admin-api`; set `OWS_WALLET_UUID` and mailbox env vars) |
 | `scripts/install-openclaw-skill.sh` | CLI installer for `~/.openclaw/workspace/skills` |
 
 ## OpenWallet OWS hackathon (public GitHub repo)
 
 The [OpenWallet OWS hackathon](https://hackathon.openwallet.sh/) expects a **public** GitHub repository for integrations using **OpenWallet by Moonpay**.
 
-1. Create a **public** repo (or use a public fork) and ensure it contains at least:
-   - `skills/x402_mailbox_ows/SKILL.md`
-   - `scripts/install-openclaw-skill.sh`
-   - `scripts/test-ows-x402.sh` (edit host, OWS wallet UUID, and mailbox JSON before demoing)
-   - `INSTALL-OPENCLAW.md` (this file)
-   - `workspace/x402-config-template.ini` (optional; documents the fixed pay-to address)
-2. Push to GitHub and copy the repo URL (e.g. `https://github.com/your-org/your-public-repo`).
-3. On the mail server, set **`X402_OWS_PUBLIC_REPO_URL`** to that URL in **`x402-policy.env`**, then restart the admin UI service, for example:
+1. This repository is intended to satisfy that requirement: `skills/x402_mailbox_ows/SKILL.md`, `scripts/install-openclaw-skill.sh`, `scripts/test-ows-x402.sh`, `INSTALL-OPENCLAW.md`, and `workspace/x402-config-template.ini`.
+2. On the **production** mail server, set **`X402_OWS_PUBLIC_REPO_URL`** to **`https://github.com/CuseTheJuice/openwallet-hackathon-app`** in **`x402-policy.env`**, then restart the admin UI service, for example:
 
    ```bash
-   sudo sed -i 's|^X402_OWS_PUBLIC_REPO_URL=.*|X402_OWS_PUBLIC_REPO_URL=https://github.com/your-org/your-public-repo|' /opt/postfix_x402/x402-policy.env
+   sudo sed -i 's|^X402_OWS_PUBLIC_REPO_URL=.*|X402_OWS_PUBLIC_REPO_URL=https://github.com/CuseTheJuice/openwallet-hackathon-app|' /opt/postfix_x402/x402-policy.env
    sudo systemctl restart x402-admin-ui
    ```
 
-4. The **home** page and **OpenClaw + OWS** admin page will then link to the hackathon site and your public repo.
+3. The **home** page and **OpenClaw + OWS** admin page will then link to the hackathon site and this public repo.
 
-`GET /admin-api/ui/config` also returns `ows_hackathon_url` and `ows_public_repo_url` for static pages that consume JSON config.
+`GET https://mail.cusethejuice.com/admin-api/ui/config` returns `ows_hackathon_url`, `ows_public_repo_url`, and OpenClaw-related fields for static pages that consume JSON config.
 
 ## Admin UI
 
-After deploy, open **OpenClaw + OWS** in the admin sidebar (`/admin-api/ui/openclaw`) for the same summary, hackathon link, and optional public repo link.
+On **mail.cusethejuice.com**, open **OpenClaw + OWS** in the admin sidebar (`/admin-api/ui/openclaw`) for the same summary, hackathon link, and public repo link.
