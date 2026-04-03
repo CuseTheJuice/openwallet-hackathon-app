@@ -8,7 +8,61 @@ The live mail stack is built from the upstream **[x402-bot-mailbox](https://gith
 
 The skill hardcodes the x402 **pay-to** address **`0xF9905a9c4784533c8cee3487b4546ed03126DcA5`**. It is **not** configurable inside the skill; agents are instructed never to substitute another address.
 
-Your **OWS wallet ID** (UUID from `ows wallet`) is separate: it selects which MoonPay/OWS wallet **signs** the payment, not the destination address above.
+Your **OWS wallet ID** (UUID from `ows wallet list`) is separate: it selects which OWS wallet **signs** the payment, not the destination address above.
+
+## Install OWS CLI (prerequisite)
+
+The skill and test script call the **`ows`** binary ([Open Wallet Standard](https://openwallet.sh/) CLI). Install it **before** installing the OpenClaw skill.
+
+**Install (global npm package):**
+
+```bash
+npm install -g @open-wallet-standard/core
+```
+
+Confirm the CLI is available:
+
+```bash
+ows --help
+```
+
+**Create or select a wallet** (encrypted vault under `~/.ows/`):
+
+```bash
+ows wallet create --name my-agent
+ows wallet list
+```
+
+Copy the **wallet UUID** from `ows wallet list` for `OWS_WALLET_UUID` (see `scripts/test-ows-x402.sh`) and for `ows pay request --wallet "<uuid>"`.
+
+**Fund the wallet** with **USDC on Base** so x402 payments to the mail admin API can settle. Check balance when needed:
+
+```bash
+ows wallet balance <OWS_WALLET_UUID>
+```
+
+Further background: [OWS specification](https://docs.openwallet.sh/), [hackathon hub](https://hackathon.openwallet.sh/). The [`ows pay request`](https://openwallet.sh/) flow signs and satisfies **HTTP 402** payment challenges (this integration uses **Base USDC** toward the fixed pay-to address above).
+
+## What OpenClaw can do with an OWS-linked wallet on mail.cusethejuice.com
+
+With this repo’s skill enabled and **`ows`** configured, an OpenClaw agent can use **`ows pay request`** against the production x402 API **`https://mail.cusethejuice.com/admin-api`**. The linked OWS wallet **pays each priced HTTP call** (micropayments in USDC on Base); the server’s x402 receiver is the fixed address in the skill, not the user’s OWS address.
+
+**End-to-end mail operations (machine JSON API, preferred for agents):**
+
+- **Create a mailbox** — `POST /users/add` with domain, local part, Linux username, and password (or the GET/HTML discovery flow).
+- **List inbox** — `POST /machine/request/list` (optional limit) or GET routes under `/machine/mailboxes/{email}/messages`.
+- **Read one message** — by `message_id` via `POST /machine/request/message` or GET.
+- **Attachments** — fetch parsed attachment metadata for a message (`POST /machine/request/attachments` or GET).
+- **Quota** — current usage snapshot (`POST /machine/request/quota` or GET).
+- **Send email** — `POST /machine/request/send` with `to`, subject, body, optional `cc` / `bcc`.
+
+**Human-oriented flows:** the same product exposes **HTML x402 pages** (GET/HEAD) under paths like `/machine/human/list`, `.../message`, `.../attachments`, `.../quota`, `.../send` for browser-style payment and session UX; agents can still drive them with `ows pay request` where appropriate.
+
+**Storage upgrades:** paid tier steps under `/ui/storage-upgrade/pay/t100`, `t500`, `t1g` (typically after starting a flow via `POST /ui/storage-upgrade/start` in a real browser session).
+
+**Pricing and links:** live USDC amounts and hackathon/repo URLs come from **`GET https://mail.cusethejuice.com/admin-api/ui/config`**. Operators can surface this repo in the admin UI via `X402_OWS_PUBLIC_REPO_URL` (see below). The **OpenClaw + OWS** admin page is at **`https://mail.cusethejuice.com/admin-api/ui/openclaw`**.
+
+The canonical route table and invocation patterns for agents are in [`skills/x402_mailbox_ows/SKILL.md`](skills/x402_mailbox_ows/SKILL.md).
 
 ## Install from the command line
 

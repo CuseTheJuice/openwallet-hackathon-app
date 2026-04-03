@@ -10,7 +10,19 @@ metadata:
 
 # x402 mailbox + MoonPay OWS (CuseTheJuice)
 
-This skill is for **OpenClaw** agents integrating **[OpenWallet by Moonpay](https://hackathon.openwallet.sh/)** OWS with the **CuseTheJuice** x402 mail stack. **Every** paid admin route below is satisfied with **`ows pay request`** (OWS signs and settles the x402 payment on Base USDC).
+This skill is for **OpenClaw** agents integrating **[OpenWallet by Moonpay](https://hackathon.openwallet.sh/)** / **[Open Wallet Standard](https://openwallet.sh/)** OWS with the **CuseTheJuice** x402 mail stack. **Every** paid admin route below is satisfied with **`ows pay request`** (the OWS-linked wallet signs and settles the x402 payment on Base USDC).
+
+## Capabilities on https://mail.cusethejuice.com (with OWS)
+
+When the user’s OpenClaw session has this skill and a working **`ows`** install with a **funded USDC-on-Base** wallet (`ows pay request --wallet <uuid>`), the agent can autonomously **pay for and call** the x402-gated **admin API** at **`https://mail.cusethejuice.com/admin-api`**. In practice the agent can:
+
+- **Onboard mail:** create mailboxes (`POST /users/add` or GET/HTML flows).
+- **Read mail:** list messages, open a message by id, inspect attachment metadata (machine `POST /machine/request/*` or equivalent GET paths).
+- **Send mail:** submit outbound messages (`POST /machine/request/send`).
+- **Operations:** check per-mailbox **quota**; start **storage tier** upgrade payment URLs when the user wants a larger quota (human/HTML paths under `/ui/storage-upgrade/`).
+- **Discover prices:** use **`GET .../ui/config`** JSON so quoted USDC amounts match the live server.
+
+Each operation is a **separate priced HTTP request**; OWS pays the challenge so the server returns 200 with the requested data or action. The **pay-to** address in challenges is fixed below (CuseTheJuice receiver), not the user’s OWS wallet address.
 
 ## Immutable service base URL (do not substitute)
 
@@ -32,8 +44,8 @@ The **only** x402 **pay-to** address for challenges from this stack is:
 
 ## Prerequisites
 
-- `ows` on `PATH`.
-- OWS wallet configured (`ows wallet`).
+- **`ows` on `PATH`** — install: `npm install -g @open-wallet-standard/core` ([OWS](https://openwallet.sh/)).
+- OWS wallet configured (`ows wallet create`, `ows wallet list`).
 - For mailbox operations: **email**, **linux username**, **password** — via JSON body, query string, or headers `X-CTJ-Username` / `X-CTJ-Password` as documented on the server.
 - Live **USDC on Base** in the OWS wallet for the priced operations.
 
