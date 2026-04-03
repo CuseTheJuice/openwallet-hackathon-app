@@ -36,7 +36,3 @@ chmod +x scripts/install-openclaw-skill.sh scripts/test-ows-x402.sh
 **3. Optional:** run [`scripts/test-ows-x402.sh`](scripts/test-ows-x402.sh) against **`https://mail.cusethejuice.com/admin-api`** after setting `OWS_WALLET_UUID` and mailbox env vars (USDC on Base required).
 
 [INSTALL-OPENCLAW.md](INSTALL-OPENCLAW.md) has the full setup: OWS install, wallet funding, what an OpenClaw agent can do on **mail.cusethejuice.com** with an OWS-linked wallet, and linking this repo from the live admin UI (`X402_OWS_PUBLIC_REPO_URL`).
-
-## Upstream
-
-Derived from **[x402-bot-mailbox](https://github.com/CuseTheJuice/x402-bot-mailbox)** (full Postfix installer and admin UI). This repo is the minimal **public** surface for hackathon reviewers; behavior and URLs stay aligned with **mail.cusethejuice.com**.
