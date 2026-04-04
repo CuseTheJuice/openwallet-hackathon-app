@@ -18,4 +18,4 @@ chmod a+r "${DEST}/SKILL.md"
 
 echo "Installed OpenClaw skill: ${DEST}/SKILL.md"
 echo "Restart the OpenClaw gateway or start a new session (e.g. openclaw skills list)."
-echo "See INSTALL-OPENCLAW.md in the repository for full instructions."
+echo "See INSTALL-OPENCLAW.md in the repository for full instructions, or run ./install.sh from the repo root for a one-shot setup."

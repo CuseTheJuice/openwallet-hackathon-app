@@ -22,30 +22,43 @@ For setup, routes, and agent behavior, see [INSTALL-OPENCLAW.md](INSTALL-OPENCLA
 
 | Path | Description |
 |------|-------------|
+| [install.sh](install.sh) | **One-shot installer** (OWS CLI if needed + OpenClaw skill + script perms; optional `--hype-video`) |
 | [skills/x402_mailbox_ows/SKILL.md](skills/x402_mailbox_ows/SKILL.md) | OpenClaw skill (`ows` required) |
-| [scripts/install-openclaw-skill.sh](scripts/install-openclaw-skill.sh) | Installs skill into `~/.openclaw/workspace/skills/x402_mailbox_ows/` |
+| [scripts/install-openclaw-skill.sh](scripts/install-openclaw-skill.sh) | Installs skill into `~/.openclaw/workspace/skills/x402_mailbox_ows/` (used by `install.sh`) |
 | [scripts/test-ows-x402.sh](scripts/test-ows-x402.sh) | Example `ows pay request` against **mail.cusethejuice.com** (set `OWS_WALLET_UUID` + mailbox env vars; optional `MAIL_API_BASE` for local dev only) |
 | [INSTALL-OPENCLAW.md](INSTALL-OPENCLAW.md) | Full install + hackathon publishing notes |
 | [workspace/x402-config-template.ini](workspace/x402-config-template.ini) | Example local config; fixed x402 pay-to matches the skill |
 | [hype-video/](hype-video/) | **30s Remotion hype reel** ([`npx create-video@latest`](https://www.remotion.dev/docs/cli/create-video)); run `npm run render` inside that folder for `out/hype.mp4` |
 
-## Quick start
+## Installation
 
-**1. Install the OWS CLI** (required for `ows pay request`; see [Open Wallet Standard](https://openwallet.sh/)):
+**Prerequisites:** [Git](https://git-scm.com/), [Node.js](https://nodejs.org/) (includes **npm**) for installing the [OWS](https://openwallet.sh/) CLI, and an [OpenClaw](https://docs.openclaw.ai/) workspace if you want the skill under `~/.openclaw/workspace` (default).
 
-```bash
-npm install -g @open-wallet-standard/core
-ows wallet list   # use a wallet UUID as OWS_WALLET_UUID for the test script
-```
-
-**2. Install the OpenClaw skill** into your workspace:
+**One command** from a fresh clone:
 
 ```bash
-chmod +x scripts/install-openclaw-skill.sh scripts/test-ows-x402.sh
-./scripts/install-openclaw-skill.sh
-# optional: OPENCLAW_WORKSPACE=... ./scripts/install-openclaw-skill.sh
+git clone https://github.com/CuseTheJuice/openwallet-hackathon-app.git
+cd openwallet-hackathon-app
+chmod +x install.sh   # if your checkout did not preserve execute bit
+./install.sh
 ```
 
-**3. Optional:** run [`scripts/test-ows-x402.sh`](scripts/test-ows-x402.sh) against **`https://mail.cusethejuice.com/admin-api`** after setting `OWS_WALLET_UUID` and mailbox env vars (USDC on Base required).
+What **`./install.sh`** does:
 
-[INSTALL-OPENCLAW.md](INSTALL-OPENCLAW.md) has the full setup: OWS install, wallet funding, what an OpenClaw agent can do on **mail.cusethejuice.com** with an OWS-linked wallet, and linking this repo from the live admin UI (`X402_OWS_PUBLIC_REPO_URL`).
+| Step | Action |
+|------|--------|
+| OWS CLI | Runs `npm install -g @open-wallet-standard/core` **only if** `ows` is not already on your `PATH` |
+| OpenClaw skill | Copies [`skills/x402_mailbox_ows/SKILL.md`](skills/x402_mailbox_ows/SKILL.md) to **`${OPENCLAW_WORKSPACE:-~/.openclaw/workspace}/skills/x402_mailbox_ows/SKILL.md`** |
+| Scripts | `chmod +x` on `scripts/install-openclaw-skill.sh` and `scripts/test-ows-x402.sh` |
+
+**Flags:** `./install.sh --skip-ows` if OWS is already installed; `./install.sh --hype-video` to also run **`npm install`** in [`hype-video/`](hype-video/) (Remotion). Run `./install.sh --help` for usage.
+
+**After install:** create or choose a wallet (`ows wallet list`), fund **USDC on Base**, restart OpenClaw (`openclaw gateway restart` or a new session), verify with `openclaw skills list`. To smoke-test the API:
+
+```bash
+export OWS_WALLET_UUID='…'   # from ows wallet list
+export MAIL_EMAIL='…' MAIL_USERNAME='…' MAIL_PASSWORD='…'
+./scripts/test-ows-x402.sh
+```
+
+[INSTALL-OPENCLAW.md](INSTALL-OPENCLAW.md) covers wallet funding, every priced route, what the agent can do on **mail.cusethejuice.com**, server-side **`X402_OWS_PUBLIC_REPO_URL`**, and manual steps if you prefer not to use **`install.sh`**.

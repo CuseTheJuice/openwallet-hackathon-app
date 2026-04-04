@@ -10,6 +10,21 @@ The skill hardcodes the x402 **pay-to** address **`0xF9905a9c4784533c8cee3487b45
 
 Your **OWS wallet ID** (UUID from `ows wallet list`) is separate: it selects which OWS wallet **signs** the payment, not the destination address above.
 
+## One-shot install (recommended)
+
+From a clone of this repository, run **`./install.sh`** at the repo root. It will:
+
+1. Install the **OWS CLI** globally with `npm install -g @open-wallet-standard/core` if `ows` is not already on your `PATH` (requires **Node.js** and **npm**).
+2. Install the **OpenClaw skill** by invoking `scripts/install-openclaw-skill.sh` (honours **`OPENCLAW_WORKSPACE`**).
+3. Mark **`scripts/test-ows-x402.sh`** as executable.
+
+Useful flags:
+
+- **`./install.sh --skip-ows`** — if you already installed OWS yourself.
+- **`./install.sh --hype-video`** — also runs **`npm install`** in **`hype-video/`** for the Remotion project.
+
+Then follow **Next steps** printed at the end of the script (wallet, USDC on Base, OpenClaw restart). The sections below spell out the same prerequisites in more detail.
+
 ## Install OWS CLI (prerequisite)
 
 The skill and test script call the **`ows`** binary ([Open Wallet Standard](https://openwallet.sh/) CLI). Install it **before** installing the OpenClaw skill.
