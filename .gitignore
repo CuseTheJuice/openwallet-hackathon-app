@@ -1,3 +1,6 @@
+# Local-only Remotion project (not shipped on remote)
+hype-video/
+
 # Local secrets (never commit)
 .env
 *.pem

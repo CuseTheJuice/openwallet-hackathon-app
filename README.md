@@ -22,13 +22,12 @@ For setup, routes, and agent behavior, see [INSTALL-OPENCLAW.md](INSTALL-OPENCLA
 
 | Path | Description |
 |------|-------------|
-| [install.sh](install.sh) | **One-shot installer** (OWS CLI if needed + OpenClaw skill + script perms; optional `--hype-video`) |
+| [install.sh](install.sh) | **One-shot installer** (OWS CLI if needed + OpenClaw skill + script perms) |
 | [skills/x402_mailbox_ows/SKILL.md](skills/x402_mailbox_ows/SKILL.md) | OpenClaw skill (`ows` required) |
 | [scripts/install-openclaw-skill.sh](scripts/install-openclaw-skill.sh) | Installs skill into `~/.openclaw/workspace/skills/x402_mailbox_ows/` (used by `install.sh`) |
 | [scripts/test-ows-x402.sh](scripts/test-ows-x402.sh) | Example `ows pay request` against **mail.cusethejuice.com** (set `OWS_WALLET_UUID` + mailbox env vars; optional `MAIL_API_BASE` for local dev only) |
 | [INSTALL-OPENCLAW.md](INSTALL-OPENCLAW.md) | Full install + hackathon publishing notes |
 | [workspace/x402-config-template.ini](workspace/x402-config-template.ini) | Example local config; fixed x402 pay-to matches the skill |
-| [hype-video/](hype-video/) | **30s Remotion hype reel** with background music (`public/hype-music.wav`); `npm run render` → `out/x402-email-hype.mp4` |
 
 ## Installation
 
@@ -51,7 +50,7 @@ What **`./install.sh`** does:
 | OpenClaw skill | Copies [`skills/x402_mailbox_ows/SKILL.md`](skills/x402_mailbox_ows/SKILL.md) to **`${OPENCLAW_WORKSPACE:-~/.openclaw/workspace}/skills/x402_mailbox_ows/SKILL.md`** |
 | Scripts | `chmod +x` on `scripts/install-openclaw-skill.sh` and `scripts/test-ows-x402.sh` |
 
-**Flags:** `./install.sh --skip-ows` if OWS is already installed; `./install.sh --hype-video` to also run **`npm install`** in [`hype-video/`](hype-video/) (Remotion). Run `./install.sh --help` for usage.
+**Flags:** `./install.sh --skip-ows` if OWS is already installed. Run `./install.sh --help` for usage.
 
 **After install:** create or choose a wallet (`ows wallet list`), fund **USDC on Base**, restart OpenClaw (`openclaw gateway restart` or a new session), verify with `openclaw skills list`. To smoke-test the API:
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# One-shot install: OWS CLI (if missing), OpenClaw x402_mailbox_ows skill, optional hype-video deps.
+# One-shot install: OWS CLI (if missing), OpenClaw x402_mailbox_ows skill.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS="${REPO_ROOT}/scripts"
 OWS_PKG="@open-wallet-standard/core"
 SKIP_OWS=0
-HYPE_VIDEO=0
 
 usage() {
   cat <<'EOF'
@@ -19,7 +18,6 @@ Usage: ./install.sh [options]
 
   Options:
     --skip-ows     Do not run npm install -g (use if ows is already installed)
-    --hype-video   Also run npm install in hype-video/ (Remotion project)
     -h, --help     Show this help
 
   Environment:
@@ -28,7 +26,7 @@ Usage: ./install.sh [options]
   Examples:
     ./install.sh
     OPENCLAW_WORKSPACE=/path/to/workspace ./install.sh
-    ./install.sh --skip-ows --hype-video
+    ./install.sh --skip-ows
 EOF
 }
 
@@ -36,10 +34,6 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --skip-ows)
       SKIP_OWS=1
-      shift
-      ;;
-    --hype-video)
-      HYPE_VIDEO=1
       shift
       ;;
     -h | --help)
@@ -88,15 +82,6 @@ fi
 
 echo "==> Installing OpenClaw skill (x402_mailbox_ows)"
 bash "${SCRIPTS}/install-openclaw-skill.sh"
-
-if [[ "${HYPE_VIDEO}" -eq 1 ]]; then
-  if [[ ! -f "${REPO_ROOT}/hype-video/package.json" ]]; then
-    echo "WARN: hype-video/package.json missing; skipping --hype-video." >&2
-  else
-    echo "==> Installing hype-video dependencies (npm install)"
-    (cd "${REPO_ROOT}/hype-video" && npm install)
-  fi
-fi
 
 cat <<EOF
 

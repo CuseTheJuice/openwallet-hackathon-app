@@ -21,8 +21,6 @@ From a clone of this repository, run **`./install.sh`** at the repo root. It wil
 Useful flags:
 
 - **`./install.sh --skip-ows`** — if you already installed OWS yourself.
-- **`./install.sh --hype-video`** — also runs **`npm install`** in **`hype-video/`** for the Remotion project.
-
 Then follow **Next steps** printed at the end of the script (wallet, USDC on Base, OpenClaw restart). The sections below spell out the same prerequisites in more detail.
 
 ## Install OWS CLI (prerequisite)
@@ -70,8 +68,12 @@ With this repo’s skill enabled and **`ows`** configured, an OpenClaw agent can
 - **Attachments** — fetch parsed attachment metadata for a message (`POST /machine/request/attachments` or GET).
 - **Quota** — current usage snapshot (`POST /machine/request/quota` or GET).
 - **Send email** — `POST /machine/request/send` with `to`, subject, body, optional `cc` / `bcc`.
+- **Reply / reply-all / forward** — `POST /machine/request/reply`, `/machine/request/reply-all`, `/machine/request/forward` (mailbox auth + `message_id` and reply/forward fields).
+- **Move or delete messages** — `POST /machine/request/move`, `/machine/request/delete`.
+- **Folders** — `POST /machine/request/folder/create`, `.../delete`, `.../rename`.
+- **Mailbox** — `POST /machine/request/mailbox/download`, `.../reset-password`, `.../delete-account`.
 
-**Human-oriented flows:** the same product exposes **HTML x402 pages** (GET/HEAD) under paths like `/machine/human/list`, `.../message`, `.../attachments`, `.../quota`, `.../send` for browser-style payment and session UX; agents can still drive them with `ows pay request` where appropriate.
+**Human-oriented flows:** the same product exposes **HTML x402 pages** (GET/HEAD) under paths like `/machine/human/list`, `.../message`, `.../attachments`, `.../quota`, `.../send`, `.../reply`, `.../forward` for browser-style payment and session UX; agents can still drive them with `ows pay request` where appropriate.
 
 **Storage upgrades:** paid tier steps under `/ui/storage-upgrade/pay/t100`, `t500`, `t1g` (typically after starting a flow via `POST /ui/storage-upgrade/start` in a real browser session).
 
