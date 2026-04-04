@@ -5,4 +5,4 @@ dist
 
 # Render output (keep the shipped hype reel in git for reviewers).
 out/*
-!out/hype.mp4
+!out/x402-email-hype.mp4

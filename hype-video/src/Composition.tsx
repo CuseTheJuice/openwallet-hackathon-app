@@ -1,9 +1,12 @@
 import {
   AbsoluteFill,
+  Audio,
   Easing,
   interpolate,
   Sequence,
+  staticFile,
   useCurrentFrame,
+  useVideoConfig,
 } from "remotion";
 
 const BG = "#04060c";
@@ -52,6 +55,27 @@ function Vignette() {
       }}
     />
   );
+}
+
+function BackgroundMusic() {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const fadeIn = interpolate(frame, [0, 25], [0, 1], {
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.cubic),
+  });
+  const fadeOut = interpolate(
+    frame,
+    [durationInFrames - 40, durationInFrames - 1],
+    [1, 0],
+    {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+      easing: Easing.in(Easing.cubic),
+    },
+  );
+  const volume = 0.26 * fadeIn * fadeOut;
+  return <Audio src={staticFile("hype-music.wav")} volume={volume} />;
 }
 
 function Hero() {
@@ -319,6 +343,7 @@ function Outro() {
 export const MyComposition = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: BG }}>
+      <BackgroundMusic />
       <Grid />
       <Sequence durationInFrames={120}>
         <Hero />

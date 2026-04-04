@@ -28,7 +28,7 @@ For setup, routes, and agent behavior, see [INSTALL-OPENCLAW.md](INSTALL-OPENCLA
 | [scripts/test-ows-x402.sh](scripts/test-ows-x402.sh) | Example `ows pay request` against **mail.cusethejuice.com** (set `OWS_WALLET_UUID` + mailbox env vars; optional `MAIL_API_BASE` for local dev only) |
 | [INSTALL-OPENCLAW.md](INSTALL-OPENCLAW.md) | Full install + hackathon publishing notes |
 | [workspace/x402-config-template.ini](workspace/x402-config-template.ini) | Example local config; fixed x402 pay-to matches the skill |
-| [hype-video/](hype-video/) | **30s Remotion hype reel** ([`npx create-video@latest`](https://www.remotion.dev/docs/cli/create-video)); run `npm run render` inside that folder for `out/hype.mp4` |
+| [hype-video/](hype-video/) | **30s Remotion hype reel** with background music (`public/hype-music.wav`); `npm run render` → `out/x402-email-hype.mp4` |
 
 ## Installation
 

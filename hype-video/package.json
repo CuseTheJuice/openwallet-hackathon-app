@@ -25,7 +25,8 @@
   "scripts": {
     "dev": "remotion studio",
     "build": "remotion bundle",
-    "render": "remotion render src/index.ts MyComp out/hype.mp4 --codec h264",
+    "render": "remotion render src/index.ts MyComp out/x402-email-hype.mp4 --codec h264",
+    "generate-music": "node scripts/generate-hype-music.cjs",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
   },

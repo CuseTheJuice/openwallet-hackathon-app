@@ -7,11 +7,20 @@
 ```bash
 npm install
 npm run dev          # Remotion Studio (preview + scrub timeline)
-npm run render       # writes out/hype.mp4 (H.264)
+npm run render       # writes out/x402-email-hype.mp4 (H.264 + AAC audio)
 npm run lint
+npm run generate-music   # optional: rebuild public/hype-music.wav (procedural bed)
 ```
 
-Re-render after edits to `src/Composition.tsx` or `src/Root.tsx`. Output files under `out/` are gitignored.
+Background audio is **`public/hype-music.wav`**, played via Remotion [`<Audio>`](https://www.remotion.dev/docs/audio) with fade in/out. The WAV is **generated in-repo** (no third-party sample clearance needed):
+
+```bash
+node scripts/generate-hype-music.cjs
+```
+
+To use your own track instead, replace `public/hype-music.wav` (or add e.g. `music.mp3` and update `staticFile(...)` in `src/Composition.tsx`). Prefer royalty-free sources such as [Mixkit](https://mixkit.co/free-stock-music/) and follow their license.
+
+Re-render after edits to `src/Composition.tsx` or `src/Root.tsx`. Only **`out/x402-email-hype.mp4`** is tracked for reviewers (see `.gitignore`).
 
 ## Scene breakdown
 
